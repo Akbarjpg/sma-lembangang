@@ -18,4 +18,3 @@ const beritaSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('Berita', beritaSchema);
-// const mongoose = require('mongoose')

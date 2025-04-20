@@ -37,6 +37,10 @@ const upload = multer({
   fileFilter: fileFilter
 });
 
+router.get('/protected', auth, (req, res) => {
+    res.json({ message: 'Anda berhasil mengakses rute yang dilindungi!', user: req.user });
+  });
+
 // -- FEATURE IMAGE --
 router.put('/feature-image/:featureName', auth, upload.single('image'), async (req, res) => {
   try {
@@ -55,17 +59,19 @@ router.put('/feature-image/:featureName', auth, upload.single('image'), async (r
 });
 
 // -- BERITA --
-router.post('/berita', auth, upload.single('image'), async (req, res) => {
+router.post('/berita', auth, async (req, res) => {
   try {
+    const { title, content, imageUrl } = req.body;
+
     // Validasi input
-    if (!req.body.title || !req.body.content) {
-      return res.status(400).json({ message: 'Title dan content harus diisi' });
+    if (!title || !content || !imageUrl) {
+      return res.status(400).json({ message: 'Title, content, dan imageUrl harus diisi' });
     }
 
     const berita = new Berita({
-      title: req.body.title,
-      content: req.body.content,
-      imageUrl: req.file ? '/uploads/' + req.file.filename : null
+      title,
+      content,
+      imageUrl,
     });
 
     await berita.save();
