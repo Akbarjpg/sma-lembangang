@@ -15,7 +15,7 @@ const Ekstrakulikuler = require('../models/Ekstrakulikuler');
 // Konfigurasi Upload
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/');
+    cb(null, 'uploads/'); // Folder tempat file disimpan
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -158,6 +158,31 @@ router.delete('/berita/:id', auth, async (req, res) => {
 
 
 // -- PENGUMUMAN --
+router.post('/pengumuman', auth, async (req, res) => {
+  try {
+    const { title, content, imageUrl } = req.body;
+
+    // Validasi input
+    if (!title || !content || !imageUrl) {
+      return res.status(400).json({ message: 'Title, content, dan imageUrl harus diisi' });
+    }
+
+    const pengumuman = new Pengumuman({
+      title,
+      content,
+      imageUrl,
+    });
+
+    await pengumuman.save();
+    res.status(201).json(pengumuman);
+  } catch (error) {
+    res.status(500).json({ 
+      message: 'Error creating pengumuman',
+      error: error.message 
+    });
+  }
+});
+
 router.put('/pengumuman/:id', auth, upload.single('image'), async (req, res) => {
   try {
     const pengumuman = await Pengumuman.findById(req.params.id);
@@ -194,23 +219,6 @@ router.put('/pengumuman/:id', auth, upload.single('image'), async (req, res) => 
   }
 });
 
-router.put('/pengumuman', auth, upload.single('image'), async (req, res) => {
-  try {
-    const pengumuman = new Pengumuman({
-      title: req.body.title,
-      content: req.body.content,
-      imageUrl: req.file ? '/uploads/' + req.file.filename : null
-    });
-
-    await pengumuman.save();
-    res.status(201).json(pengumuman);
-  } catch (error) {
-    res.status(500).json({ 
-      message: 'Error creating pengumuman',
-      error: error.message 
-    });
-  }
-});
 
 router.delete('/pengumuman/:id', auth, async (req, res) => {
   try {
@@ -249,12 +257,20 @@ router.get('/pengumuman', auth, async (req, res) => {
 });
 
 // -- JADWAL UJIAN --
-router.post('/jadwal', auth, upload.single('image'), async (req, res) => {
+router.post('/jadwal', async (req, res) => {
   try {
+    const { tanggal, mataPelajaran, kelas, jamMulai, jamSelesai } = req.body;
+
+    if(!tanggal || !mataPelajaran || !kelas || !jamMulai || !jamSelesai) {
+      return res.status(400).json({ message: 'Semua field harus diisi' });
+    }
+
     const jadwal = new JadwalUjian({
-      title: req.body.title,
-      content: req.body.content,
-      imageUrl: req.file ? '/uploads/' + req.file.filename : null
+      tanggal,
+      mataPelajaran,
+      kelas,
+      jamMulai,
+      jamSelesai
     });
 
     await jadwal.save();
@@ -267,13 +283,57 @@ router.post('/jadwal', auth, upload.single('image'), async (req, res) => {
   }
 });
 
+router.get('/jadwal', async (req, res) => {
+  try {
+    const jadwal = await JadwalUjian.find();
+    res.json(jadwal);
+  } catch (error) {
+    res.status(500).json({ 
+      message: 'Error fetching jadwal ujian',
+      error: error.message 
+    });
+  }
+});
+
+router.put('/jadwal/:id', async (req, res) => {
+  try {
+    const { tanggal, mataPelajaran, kelas, jamMulai, jamSelesai } = req.body;
+
+    const jadwal = await JadwalUjian.findByIdAndUpdate(
+      req.params.id,
+      { tanggal, mataPelajaran, kelas, jamMulai, jamSelesai },
+      { new: true }
+    );
+
+    if (!jadwal) {
+      return res.status(404).json({ message: 'Jadwal ujian tidak ditemukan' });
+    }
+
+    res.json(jadwal);
+  } catch (error) {
+    res.status(500).json({ 
+      message: 'Error updating jadwal ujian',
+      error: error.message 
+    });
+  }
+});
+
 // -- EKSTRAKURIKULER --
 router.post('/ekstrakulikuler', auth, upload.single('image'), async (req, res) => {
   try {
+    console.log('Request Body:', req.body); // Log untuk memeriksa body
+    console.log('Uploaded File:', req.file); // Log untuk memeriksa file yang diunggah
+
+    const { nama, deskripsi } = req.body;
+
+    if (!nama || !deskripsi) {
+      return res.status(400).json({ message: 'Nama dan deskripsi harus diisi' });
+    }
+
     const ekskul = new Ekstrakulikuler({
-      name: req.body.name,
-      description: req.body.description,
-      imageUrl: req.file ? '/uploads/' + req.file.filename : null
+      nama,
+      deskripsi,
+      imageUrl: req.file ? '/uploads/' + req.file.filename : null,
     });
 
     await ekskul.save();
