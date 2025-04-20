@@ -1,9 +1,10 @@
-require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+require('dotenv').config(); // Hanya panggil dotenv sekali
 const app = express();
+const mongoose = require('mongoose');
+const cors = require('cors'); // Pastikan cors diimpor
 
+// Koneksi ke MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -20,18 +21,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static('uploads'));
 
 // Routes
-const adminRoutes = require('./routes/admin');
-const auth = require('./middleware/auth');
-const authRoutes = require('./routes/auth');
-const beritaRoutes = require('./routes/berita');
-const pengumumanRoutes = require('./routes/pengumuman');
+const adminRoutes = require('./routes/admin'); // Semua rute ada di admin.js
+app.use('/api/admin', adminRoutes); // Tidak perlu middleware auth di sini jika sudah diatur di admin.js
 
-app.use('/api/admin', auth, adminRoutes);
-app.use('/api/auth', authRoutes);
-app.use('/api/berita', beritaRoutes);
-app.use('/api/pengumuman', pengumumanRoutes);
+// Dashboard Route
+app.get('/api/dashboard', (req, res) => {
+    res.json({ message: 'Selamat datang di dashboard rahasia 🎉' });
+});
 
-
+// Jalankan server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

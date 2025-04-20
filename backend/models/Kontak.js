@@ -1,21 +1,20 @@
 const mongoose = require('mongoose');
 
-const beritaSchema = new mongoose.Schema({
-    title: {
+const kontakSchema = new mongoose.Schema({
+    nama: {
         type: String,
         required: true,
     },
-    content: {
+    email: {
         type: String,
         required: true,
     },
-    imageUrl: {
+    pesan: {
         type: String,
         required: true,
-    }
+    },
 }, {
     timestamps: true,
 });
 
-module.exports = mongoose.model('Berita', beritaSchema);
-// const mongoose = require('mongoose')
+module.exports = mongoose.model('Kontak', kontakSchema);

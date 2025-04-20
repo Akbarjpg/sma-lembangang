@@ -11,7 +11,12 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@react-google-maps/api": "^2.20.6",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
     "framer-motion": "^12.4.13",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.13.2",
     "next": "15.2.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

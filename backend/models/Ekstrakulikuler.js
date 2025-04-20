@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
-const beritaSchema = new mongoose.Schema({
-    title: {
+const ekstrakulikulerSchema = new mongoose.Schema({
+    nama: {
         type: String,
         required: true,
     },
-    content: {
+    deskripsi: {
         type: String,
         required: true,
     },
@@ -17,5 +17,4 @@ const beritaSchema = new mongoose.Schema({
     timestamps: true,
 });
 
-module.exports = mongoose.model('Berita', beritaSchema);
-// const mongoose = require('mongoose')
+module.exports = mongoose.model('Ekstrakulikuler', ekstrakulikulerSchema);
