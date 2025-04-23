@@ -112,6 +112,16 @@ export default function Navbar() {
             ))}
           </div>
 
+          {/* Login Button for Desktop */}
+          <div className="hidden md:block">
+            <Link 
+              href="/admin/login"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-800 transition-colors"
+            >
+              🔑 Login Admin/Guru
+            </Link>
+          </div>
+
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center">
             <button 
@@ -167,6 +177,15 @@ export default function Navbar() {
                 )}
               </div>
             ))}
+            
+            {/* Login Button for Mobile */}
+            <Link 
+              href="/admin/login"
+              className="block px-3 py-2 mt-2 text-center bg-blue-600 text-white font-medium rounded-md hover:bg-blue-800"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              🔑 Login Admin/Guru
+            </Link>
           </div>
         </div>
       )}

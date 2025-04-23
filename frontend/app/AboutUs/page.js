@@ -1,65 +1,102 @@
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable @next/next/no-html-link-for-pages */
 'use client';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
+import { HiOutlineChevronRight } from 'react-icons/hi';
 
 export default function Profile() {
   return (
-    <section className="py-20 bg-white relative overflow-hidden min-h-screen flex items-center justify-center">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 z-0">
-        {/* Gradient Background */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-purple-50 opacity-50"></div>
-        
-        {/* Pola Dekoratif di Pojok Kiri dan Kanan */}
-        <div className="absolute -left-20 -top-20 w-96 h-96 bg-blue-100 rounded-full opacity-30"></div>
-        <div className="absolute -right-20 -bottom-20 w-96 h-96 bg-purple-100 rounded-full opacity-30"></div>
+    <section className="py-16 md:py-24 bg-gradient-to-br from-blue-50 via-purple-50 to-white min-h-screen flex items-center justify-center">
+      {/* Background Effect */}
+      <div className="absolute inset-0 overflow-hidden -z-10">
+        <div className="absolute -left-32 -top-32 w-[400px] h-[400px] bg-blue-200 rounded-full opacity-20 blur-xl"></div>
+        <div className="absolute -right-32 -bottom-32 w-[400px] h-[400px] bg-purple-200 rounded-full opacity-20 blur-xl"></div>
       </div>
 
-      {/* Card Utama */}
+      {/* Main Card */}
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="bg-white shadow-2xl rounded-2xl p-8 max-w-3xl mx-4 relative z-10 text-center"
+        transition={{ duration: 0.6 }}
+        className="w-full max-w-4xl bg-white/80 backdrop-blur-lg shadow-2xl rounded-3xl md:px-14 px-4 py-10 relative z-10"
       >
-        {/* Judul */}
-        <h2 className="text-5xl font-bold text-gray-900 mb-6">SMA Muhammadiyah Lempangang</h2>
-        
-        {/* Garis Pemisah */}
-        <hr className="border-t-2 border-gray-300 mb-8" />
-
-        {/* Deskripsi Sekolah */}
-        <p className="text-xl text-gray-700 mb-6">
-          SMA Muhammadiyah Lempangang adalah sekolah unggulan yang berkomitmen untuk mencetak generasi muda yang berprestasi, berakhlak mulia, dan berwawasan luas. Kami menyediakan lingkungan belajar yang nyaman dan mendukung untuk mengembangkan potensi siswa.
-        </p>
-
-        {/* Informasi Tambahan */}
-        <div className="grid md:grid-cols-2 gap-6 text-left">
-          {/* Visi */}
-          <div>
-            <h3 className="text-2xl font-semibold text-gray-900 mb-4">Visi</h3>
-            <p className="text-gray-700">
-              Menjadi sekolah terdepan dalam mencetak generasi unggul yang beriman, berilmu, dan berakhlak mulia.
-            </p>
+        {/* Atas: Identitas dan Foto */}
+        <div className="flex flex-col md:flex-row items-center gap-8 mb-10">
+          <div className="flex-shrink-0">
+            <Image 
+              src="/logo.jpeg"
+              alt="Logo SMA"
+              width={120}
+              height={120}
+              className="rounded-full shadow-md mx-auto bg-white"
+              priority
+            />
           </div>
+          <div className="text-center md:text-left w-full">
+            <h2 className="text-3xl md:text-5xl font-extrabold text-blue-900 mb-2 leading-snug">
+              SMA Muhammadiyah Lempangang
+            </h2>
+            <div className="max-w-xl mx-auto md:mx-0">
+              <p className="text-lg md:text-xl text-gray-700 mb-1">
+                Mendidik generasi Islami yang berprestasi dan berakhlak mulia dalam suasana sekolah yang nyaman, akrab, dan inovatif. 
+                Sekolah kami mengedepankan nilai kebersamaan, ibadah, dan pengembangan potensi siswa.
+              </p>
+            </div>
+          </div>
+        </div>
 
-          {/* Misi */}
-          <div>
-            <h3 className="text-2xl font-semibold text-gray-900 mb-4">Misi</h3>
-            <ul className="list-disc list-inside text-gray-700">
-              <li>Menyelenggarakan pendidikan berkualitas.</li>
-              <li>Mengembangkan potensi siswa secara holistik.</li>
-              <li>Menanamkan nilai-nilai keislaman dan kebangsaan.</li>
+        {/* Info Visi Misi: Highlight Cards */}
+        <div className="grid md:grid-cols-2 gap-6 mb-8">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.18, duration: 0.5 }}
+            className="bg-blue-50 border-l-8 border-blue-400 rounded-2xl p-7 shadow-lg flex flex-col"
+          >
+            <h3 className="text-2xl font-semibold text-blue-700 mb-3">Visi</h3>
+            <p className="text-gray-700 text-base md:text-lg">
+              Menjadi sekolah terdepan dalam mencetak generasi unggul yang beriman, berilmu, dan berakhlak mulia, serta peduli lingkungan dan bangsa.
+            </p>
+          </motion.div>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.22, duration: 0.5 }}
+            className="bg-green-50 border-l-8 border-green-400 rounded-2xl p-7 shadow-lg flex flex-col"
+          >
+            <h3 className="text-2xl font-semibold text-green-700 mb-3">Misi</h3>
+            <ul className="list-disc list-inside text-gray-700 text-base md:text-lg space-y-1">
+              <li>Menyelenggarakan pendidikan yang berkualitas dan mengintegrasikan nilai-nilai Islam di semua kegiatan sekolah.</li>
+              <li>Mengembangkan potensi siswa baik akademik maupun non-akademik dalam suasana kekeluargaan.</li>
+              <li>Memberikan teladan akhlak, disiplin, serta motivasi berprestasi.</li>
             </ul>
+          </motion.div>
+        </div>
+
+        {/* Optional Info Kepala Sekolah */}
+        <div className="mb-8 text-center">
+          <div className="inline-block bg-white/80 backdrop-blur-md rounded-xl p-6 shadow w-full max-w-md">
+            <h4 className="text-lg font-bold text-gray-900 mb-2">Sambutan Kepala Sekolah</h4>
+            <p className="text-gray-800 italic mb-1">
+              "SMA Muhammadiyah Lempangang tidak hanya mendidik secara akademik, tapi juga memberi perhatian besar pada pembiasaan ibadah, kejujuran, dan kebersamaan. Siswa-siswi kami diarahkan menjadi insan yang berilmu, santun, dan siap menghadapi era digital dengan nilai Islami."
+            </p>
+            <span className="text-sm font-semibold text-blue-700 block mt-3">- Drs. Ahmad, S.Pd (Kepala Sekolah)</span>
           </div>
         </div>
 
         {/* Tombol Aksi */}
-        <div className="mt-8">
+        <div className="flex flex-col md:flex-row justify-center gap-4 mt-2">
           <a
-            href="/berita" // Ganti dengan link yang sesuai
-            className="inline-flex items-center px-6 py-3 bg-green-700 text-white text-lg font-semibold rounded-2xl hover:bg-green-800 transition-colors"
+            href="/berita"
+            className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-green-600 to-blue-700 text-white text-lg font-semibold rounded-2xl drop-shadow-md hover:to-green-700 hover:from-blue-700 transition-colors"
           >
-            Lihat Berita Terbaru
+            <span>Lihat Berita Terbaru</span>
+            <HiOutlineChevronRight className="ml-2 text-2xl" />
+          </a>
+          <a
+            href="/"
+            className="inline-flex items-center justify-center px-6 py-3 bg-slate-100 hover:bg-blue-100 text-blue-700 text-lg font-semibold rounded-2xl transition-colors"
+          >
+            Kembali ke Beranda
           </a>
         </div>
       </motion.div>

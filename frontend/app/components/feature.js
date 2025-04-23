@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 
 import { HiOutlineMail, HiOutlinePencilAlt, HiOutlineQuestionMarkCircle, HiOutlineNewspaper, HiOutlineCalendar, HiOutlineUser } from 'react-icons/hi'; // Import ikon outline
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'; // Import Google Maps
+import Link from 'next/link';
 
 // Komponen Peta
 const Map = () => {
@@ -73,9 +74,11 @@ export default function Features() {
                 </div>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mt-7">Visi Misi</h3>
-              <button className="mt-4 px-6 py-2 bg-green-700 text-white text-sm font-semibold rounded-2xl hover:bg-green-800 transition-colors">
-                Selengkapnya
-              </button>
+              <Link href="/AboutUs" passHref legacyBehavior>
+                <button className="mt-4 px-6 py-2 bg-green-700 text-white text-sm font-semibold rounded-2xl hover:bg-green-800 transition-colors">
+                  Selengkapnya
+                </button>
+              </Link>
             </motion.div>
 
             {/* Kepala Sekolah */}
@@ -89,9 +92,11 @@ export default function Features() {
                 </div>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mt-7">Kepala Sekolah</h3>
-              <button className="mt-4 px-6 py-2 bg-green-700 text-white text-sm font-semibold rounded-2xl hover:bg-green-800 transition-colors">
-                Selengkapnya
-              </button>
+              <Link href="/kepala-sekolah" passHref legacyBehavior>
+                <button className="mt-4 px-6 py-2 bg-green-700 text-white text-sm font-semibold rounded-2xl hover:bg-green-800 transition-colors">
+                  Selengkapnya
+                </button>
+              </Link>
             </motion.div>
 
             {/* Tentang Sekolah */}
@@ -105,9 +110,11 @@ export default function Features() {
                 </div>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mt-7">Tentang Sekolah</h3>
-              <button className="mt-4 px-6 py-2 bg-green-700 text-white text-sm font-semibold rounded-2xl hover:bg-green-800 transition-colors">
-                Selengkapnya
-              </button>
+              <Link href="/tentang-sekolah" passHref legacyBehavior>
+                <button className="mt-4 px-6 py-2 bg-green-700 text-white text-sm font-semibold rounded-2xl hover:bg-green-800 transition-colors">
+                  Selengkapnya
+                </button>
+              </Link>
             </motion.div>
           </div>
         </div>
