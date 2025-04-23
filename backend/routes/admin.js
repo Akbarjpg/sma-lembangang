@@ -370,4 +370,7 @@ router.delete('/ekstrakulikuler/:id', auth, async (req, res) => {
   }
 });
 
+const multerErrorHandler = require('../middleware/multerErrorHandler');
+router.use(multerErrorHandler);
+
 module.exports = router;

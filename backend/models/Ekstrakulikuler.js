@@ -11,7 +11,6 @@ const ekstrakulikulerSchema = new mongoose.Schema({
     },
     imageUrl: {
         type: String,
-        required: true,
     }
 }, {
     timestamps: true,
