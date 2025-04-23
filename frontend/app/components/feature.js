@@ -1,5 +1,6 @@
 'use client';
-import { motion } from 'framer-motion';
+import { motion } from 'framer-motion'
+
 import { HiOutlineMail, HiOutlinePencilAlt, HiOutlineQuestionMarkCircle, HiOutlineNewspaper, HiOutlineCalendar, HiOutlineUser } from 'react-icons/hi'; // Import ikon outline
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'; // Import Google Maps
 
@@ -189,7 +190,7 @@ export default function Features() {
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
             />
-            </div>
+          </div>
         </div>
       </section>
     </>

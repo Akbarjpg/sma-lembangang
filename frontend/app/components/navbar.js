@@ -1,19 +1,21 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { FaChevronDown } from 'react-icons/fa';
+import { HiMenu, HiX } from 'react-icons/hi';
 
 export default function Navbar() {
   const [subMenuOpen, setSubMenuOpen] = useState(false);
-  const menuRef = useRef(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const menuItems = [
     { name: 'Beranda', href: '/' },
     { name: 'Profil', href: '/AboutUs' },
     { name: 'Akademik', href: '/akademik' },
-    { name: 'Informasi', href: '#' }, // Informasi akan memiliki submenu
+    { name: 'Informasi', href: '#', hasSubmenu: true },
     { name: 'Kontak', href: '/kontak' }
   ];
 
@@ -23,55 +25,151 @@ export default function Navbar() {
     { name: 'Ekstrakurikuler', href: '/ekstrakurikuler' }
   ];
 
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 10) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (mobileMenuOpen && !event.target.closest('.mobile-menu') && 
+          !event.target.closest('.menu-button')) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [mobileMenuOpen]);
+
   return (
-    <>
-      {/* Navbar Utama */}
-      <nav className="absolute top-0 left-0 w-full flex justify-between items-center p-4 z-50 bg-transparent">
-        <div className="flex items-center space-x-3">
-          <img src="/logo.jpeg" alt="Logo" className="h-16 ml-7" />
-        </div>
-        <ul className="hidden md:flex space-x-6 text-gray-800 font-medium">
-          {menuItems.map((menu, index) => (
-            <li key={index} className="relative group cursor-pointer">
-              {menu.name === 'Informasi' ? (
-                <button 
-                  onClick={() => setSubMenuOpen(!subMenuOpen)} 
-                  className="flex items-center font-bold focus:outline-none"
-                >
-                  {menu.name}
-                  <motion.span
-                    animate={{ rotate: subMenuOpen ? 180 : 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="inline text-sm ml-1"
+    <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+      isScrolled || mobileMenuOpen ? 'bg-white shadow-md' : 'bg-transparent'
+    }`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
+          <div className="flex items-center">
+            <img src="/logo.jpeg" alt="Logo" className="h-12 w-auto" />
+            <span className="ml-3 text-lg font-bold text-gray-800 hidden sm:block">SMA Negeri</span>
+          </div>
+
+          {/* Desktop Menu */}
+          <div className="hidden md:flex items-center space-x-6">
+            {menuItems.map((menu, index) => (
+              <div key={index} className="relative group">
+                {menu.hasSubmenu ? (
+                  <button 
+                    onClick={() => setSubMenuOpen(!subMenuOpen)} 
+                    className="flex items-center text-gray-800 hover:text-blue-600 font-medium focus:outline-none"
                   >
-                    <FaChevronDown />
-                  </motion.span>
-                </button>
-              ) : (
-                <Link href={menu.href} className="block font-bold">
-                  {menu.name}
-                </Link>
-              )}
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-500 scale-x-0 group-hover:scale-x-100 transition-transform" />
-              
-              {menu.name === 'Informasi' && subMenuOpen && (
-                <ul 
-                  ref={menuRef} 
-                  className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden"
-                >
-                  {subMenuItems.map((submenu, index) => (
-                    <li key={index}>
-                      <Link href={submenu.href} className="block px-4 py-2 hover:bg-gray-100">
+                    {menu.name}
+                    <motion.span
+                      animate={{ rotate: subMenuOpen ? 180 : 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="inline text-sm ml-1"
+                    >
+                      <FaChevronDown />
+                    </motion.span>
+                  </button>
+                ) : (
+                  <Link 
+                    href={menu.href} 
+                    className="text-gray-800 hover:text-blue-600 font-medium"
+                  >
+                    {menu.name}
+                  </Link>
+                )}
+                
+                {/* Hover underline effect */}
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-500 scale-x-0 group-hover:scale-x-100 transition-transform" />
+                
+                {/* Submenu for desktop */}
+                {menu.hasSubmenu && subMenuOpen && (
+                  <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden z-20">
+                    {subMenuItems.map((submenu, idx) => (
+                      <Link 
+                        key={idx} 
+                        href={submenu.href}
+                        className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                      >
                         {submenu.name}
                       </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </li>
-          ))}
-        </ul>
-      </nav>
-    </>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="md:hidden flex items-center">
+            <button 
+              className="menu-button text-gray-800 hover:text-blue-600 focus:outline-none"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <HiX size={24} /> : <HiMenu size={24} />}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="mobile-menu md:hidden bg-white shadow-lg">
+          <div className="px-2 pt-2 pb-3 space-y-1">
+            {menuItems.map((menu, index) => (
+              <div key={index}>
+                {menu.hasSubmenu ? (
+                  <>
+                    <button 
+                      onClick={() => setSubMenuOpen(!subMenuOpen)} 
+                      className="w-full flex justify-between items-center px-3 py-2 text-gray-800 font-medium hover:bg-gray-100 rounded-md"
+                    >
+                      {menu.name}
+                      <FaChevronDown className={`transition-transform duration-300 ${subMenuOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    
+                    {subMenuOpen && (
+                      <div className="pl-4 mt-1 space-y-1">
+                        {subMenuItems.map((submenu, idx) => (
+                          <Link 
+                            key={idx} 
+                            href={submenu.href}
+                            className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
+                            onClick={() => setMobileMenuOpen(false)}
+                          >
+                            {submenu.name}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <Link 
+                    href={menu.href} 
+                    className="block px-3 py-2 text-gray-800 font-medium hover:bg-gray-100 rounded-md"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {menu.name}
+                  </Link>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </nav>
   );
 }

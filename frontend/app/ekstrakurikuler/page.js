@@ -31,9 +31,9 @@ export default function Ekstrakurikuler() {
   ];
 
   return (
-    <section className="py-20 bg-white relative overflow-hidden min-h-screen">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 z-0">
+    <section className="py-10 md:py-20 bg-white relative overflow-hidden min-h-screen">
+      {/* Background Pattern only on md+ screens */}
+      <div className="hidden md:block absolute inset-0 z-0">
         {/* Gradient Background */}
         <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-purple-50 opacity-50"></div>
         
@@ -45,24 +45,24 @@ export default function Ekstrakurikuler() {
       {/* Div pembungkus untuk konten */}
       <div className="max-w-5xl mx-auto px-4 relative z-10">
         {/* Judul */}
-        <div className="text-center mb-12">
-          <h2 className="text-5xl font-bold text-gray-900 mb-4">Ekstrakurikuler</h2>
+        <div className="text-center mb-6 md:mb-12">
+          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">Ekstrakurikuler</h2>
           {/* Garis Bawah */}
-          <hr className="border-t-2 border-gray-300 mx-auto w-24" />
+          <hr className="border-t-2 border-gray-300 mx-auto w-20 md:w-24" />
         </div>
 
         {/* Daftar Ekstrakurikuler */}
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {ekstrakurikuler.map((ekskul) => (
             <motion.div
               key={ekskul.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: ekskul.id * 0.1 }}
-              className="bg-white shadow-2xl rounded-2xl p-6 text-left"
+              className="bg-white shadow-xl rounded-xl p-4 md:p-6 text-left"
             >
-              <h3 className="text-2xl font-semibold text-gray-900 mb-2">{ekskul.nama}</h3>
-              <p className="text-gray-700 mb-4">{ekskul.deskripsi}</p>
+              <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-1 md:mb-2">{ekskul.nama}</h3>
+              <p className="text-gray-700 text-sm md:text-base mb-2 md:mb-4">{ekskul.deskripsi}</p>
               <p className="text-sm text-gray-500">
                 <span className="font-semibold">Jadwal:</span> {ekskul.jadwal}
               </p>

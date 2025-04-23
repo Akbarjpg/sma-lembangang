@@ -324,6 +324,11 @@ router.post('/ekstrakulikuler', auth, upload.single('image'), async (req, res) =
     console.log('Request Body:', req.body); // Log untuk memeriksa body
     console.log('Uploaded File:', req.file); // Log untuk memeriksa file yang diunggah
 
+    // Add validation for required image file
+    if (!req.file) {
+      return res.status(400).json({ message: 'Gambar (image) harus diunggah' });
+    }
+
     const { nama, deskripsi } = req.body;
 
     if (!nama || !deskripsi) {
@@ -333,7 +338,7 @@ router.post('/ekstrakulikuler', auth, upload.single('image'), async (req, res) =
     const ekskul = new Ekstrakulikuler({
       nama,
       deskripsi,
-      imageUrl: req.file ? '/uploads/' + req.file.filename : null,
+      imageUrl: '/uploads/' + req.file.filename,
     });
 
     await ekskul.save();
