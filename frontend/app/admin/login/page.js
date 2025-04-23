@@ -15,20 +15,24 @@ export default function AdminLoginPage() {
     setError('');
 
     try {
-      // Karena backend Express-mu di port 5000, ganti fetch jadi absolute URL
-      const res = await fetch('http://localhost:5000/api/auth/login', {
+      const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
       });
 
-      if (!res.ok) throw new Error(await res.text());
+      if (!res.ok) {
+        const msg = await res.text();
+        throw new Error(msg || 'Login gagal');
+      }
+
       const data = await res.json();
+      if (!data.token) throw new Error('Token tidak ditemukan di response!');
 
       localStorage.setItem('admin_token', data.token);
-      router.push('/admin');    // setelah login sukses, ke dashboard
+      router.push('/admin');
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'Gagal login');
       setLoading(false);
     }
   };

@@ -1,9 +1,31 @@
 'use client';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function AdminDashboard() {
+  const router = useRouter();
+  const [dashboardData, setDashboardData] = useState(null);
 
-  
+  useEffect(() => {
+    const token = localStorage.getItem('admin_token');
+    if (!token) {
+      router.replace('/admin/login');
+      return;
+    }
+
+    fetch('/api/dashboard', {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Tidak dapat memuat data');
+        return res.json();
+      })
+      .then(json => setDashboardData(json))
+      .catch(() => router.replace('/admin/login'));
+  }, []);
+
+  if (!dashboardData) return <p>Loading...</p>;
   
   return (
     <main className="min-h-screen bg-gray-100 py-16 px-6">
