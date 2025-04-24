@@ -48,8 +48,8 @@ export default function Features() {
         <div className="max-w-5xl mx-auto px-4 relative z-10">
           {/* Judul */}
           <div className="text-left">
-            <h2 className="text-5xl font-bold text-gray-900 mb-2">SMAN 1</h2>
-            <h2 className="text-5xl font-bold text-gray-900 mb-4">MAKASSAR</h2>
+            <h2 className="text-5xl font-bold text-gray-900 mb-2">SMAN MUHAMMADIYAH</h2>
+            <h2 className="text-5xl font-bold text-gray-900 mb-4">LEMPANGANG</h2>
           </div>
           
           {/* Garis Pemisah */}
