@@ -18,4 +18,8 @@ try {
 app.get('/api/ping', (req, res) =>
   res.json({ status: "ok" }));
 
+
+app.use((req, res, next) => {
+  res.status(404).json({ status: "error", message: "Endpoint tidak ditemukan", method: req.method, path: req.path });
+});
 module.exports = app;
