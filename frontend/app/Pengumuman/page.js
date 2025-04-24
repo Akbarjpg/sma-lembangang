@@ -12,7 +12,7 @@ export default function Pengumuman() {
     async function fetchAnnouncements() {
       setLoading(true);
       try {
-        const res = await fetch('/api/pengumuman');
+        const res = await fetch('http://localhost:5000/api/admin/pengumuman');
         if (!res.ok) throw new Error('Gagal mengambil data pengumuman');
         const data = await res.json();
         setAnnouncements(data);
@@ -71,15 +71,28 @@ export default function Pengumuman() {
           <div className="space-y-6">
             {announcements.map((announcement, index) => (
               <motion.div
-                key={announcement.id || index}
+                key={announcement._id || index}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="bg-white shadow-2xl rounded-2xl p-6 text-left"
               >
                 <h3 className="text-2xl font-semibold text-gray-900 mb-2">{announcement.title}</h3>
-                <p className="text-gray-700 mb-4">{announcement.description}</p>
-                <p className="text-sm text-gray-500">Tanggal: {announcement.date}</p>
+                {/* Tampilkan gambar jika ada */}
+                {announcement.imageUrl && (
+                  <div className="w-full flex justify-center py-2">
+                    <img
+                      src={announcement.imageUrl.startsWith('/uploads/') ?
+                          `http://localhost:5000${announcement.imageUrl}` :
+                          announcement.imageUrl}
+                      alt="gambar"
+                      className="rounded-xl max-h-48 object-contain border"
+                      style={{background:'#f8fafc'}}
+                    />
+                  </div>
+                )}
+                <p className="text-gray-700 mb-4">{announcement.content || announcement.description}</p>
+                <p className="text-sm text-gray-500">Tanggal: {announcement.date || (announcement.createdAt ? new Date(announcement.createdAt).toLocaleDateString() : '-')}</p>
               </motion.div>
             ))}
           </div>

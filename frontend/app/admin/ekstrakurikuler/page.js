@@ -18,37 +18,40 @@ const TrashIcon = () => (
   </svg>
 );
 
-// UTIL: Helper fetch wrapper
-const fetchPengumuman = async (token) => {
-  const res = await fetch('/api/admin/pengumuman', {
+const fetchEkstrakurikuler = async (token) => {
+  const res = await fetch('http://localhost:5000/api/admin/ekstrakulikuler', {
     headers: { Authorization: `Bearer ${token}` },
   });
-  if (!res.ok) throw new Error('Gagal ambil data');
+  if (!res.ok) throw new Error('Gagal ambil data ekstrakurikuler');
   return await res.json();
 };
 
-export default function AdminPengumumanPage() {
+export default function AdminEkstrakurikulerPage() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
-  const [form, setForm] = useState({ title: '', description: '', date: '' });
-  const [file, setFile] = useState(null); // State untuk file upload
-  // Mengambil token dari localStorage
+  const [form, setForm] = useState({ nama: '', deskripsi: '', jadwal: '' });
+  const [file, setFile] = useState(null);
+
+  // Token admin (login) dari localStorage
   const [token, setToken] = useState("");
   useEffect(() => {
     if (typeof window !== "undefined") {
       setToken(localStorage.getItem("admin_token") || "");
     }
   }, []);
+  // Fetch data setelah token ready
+  useEffect(() => {
+    if (token) refresh();
+  }, [token]);
 
-  // Ambil data pada load / perubahan
   const refresh = async () => {
     try {
       setLoading(true);
       setErr('');
-      const data = await fetchPengumuman(token);
+      const data = await fetchEkstrakurikuler(token);
       setItems(data);
     } catch (e) {
       setErr(e.message || 'Gagal mengambil data');
@@ -57,58 +60,49 @@ export default function AdminPengumumanPage() {
     }
   };
 
-  useEffect(() => {
-    if (token) {
-      refresh();
-    }
-    // eslint-disable-next-line
-  }, [token]);
-
-  // Handler form:
+  // Form handler
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-  
-  // Handler khusus untuk input file
   const handleFileChange = (e) => setFile(e.target.files[0] || null);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (
-      form.title.trim() === "" ||
-      form.description.trim() === "" ||
-      (!file && !editing)
+      form.nama.trim() === "" ||
+      form.deskripsi.trim() === "" ||
+      form.jadwal.trim() === "" ||
+      (!editing && !file) // Wajib pilih gambar jika tambah baru
     ) {
-      setErr("Judul, deskripsi, dan gambar wajib diisi!");
+      setErr("Semua field & gambar wajib diisi!");
       return;
     }
     try {
       setLoading(true);
       setErr('');
-      // Untuk create/edit: POST atau PUT
       const isEdit = !!editing;
+      // HERE IS THE MAIN FIX:
       const url = isEdit
-        ? `/api/admin/pengumuman/${editing._id}`
-        : '/api/admin/pengumuman';
+        ? `http://localhost:5000/api/admin/ekstrakulikuler/${editing._id}`
+        : 'http://localhost:5000/api/admin/ekstrakulikuler';
       const method = isEdit ? 'PUT' : 'POST';
-      
-      // Gunakan FormData untuk upload file
+
       const formData = new FormData();
-      formData.append('title', form.title);
-      formData.append('content', form.description);
-      if (form.date) formData.append('date', form.date);
+      formData.append('nama', form.nama);
+      formData.append('deskripsi', form.deskripsi);
+      formData.append('jadwal', form.jadwal);
       if (file) formData.append('image', file);
-      
-      const r = await fetch(url, {
+
+      const res = await fetch(url, {
         method,
         headers: {
           Authorization: `Bearer ${token}`,
-          // Jangan tambahkan Content-Type, browser akan otomatis set untuk FormData
         },
         body: formData,
       });
-      if (!r.ok) throw new Error(await r.text());
+      if (!res.ok) throw new Error(await res.text());
       setShowForm(false);
       setEditing(null);
-      setForm({ title: '', description: '', date: '' }); // reset
-      setFile(null); // reset file
+      setForm({ nama: '', deskripsi: '', jadwal: '' });
+      setFile(null);
       await refresh();
     } catch (e) {
       setErr(e.message || 'Error saat simpan data');
@@ -118,11 +112,11 @@ export default function AdminPengumumanPage() {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Hapus pengumuman ini?')) return;
+    if (!window.confirm('Hapus data ekstrakurikuler ini?')) return;
     try {
       setLoading(true);
       setErr('');
-      await fetch(`/api/admin/pengumuman/${id}`, {
+      await fetch(`http://localhost:5000/api/admin/ekstrakulikuler/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -134,32 +128,28 @@ export default function AdminPengumumanPage() {
     }
   };
 
-  // Untuk edit data:
   const handleEdit = (item) => {
     setEditing(item);
     setForm({
-      title: item.title,
-      description: item.content || item.description,
-      date: item.date || '',
+      nama: item.nama,
+      deskripsi: item.deskripsi,
+      jadwal: item.jadwal,
     });
-    setFile(null); // Reset file saat edit
+    setFile(null);
     setShowForm(true);
   };
 
-  // Untuk tombol tambah data:
   const handleNew = () => {
     setEditing(null);
-    setForm({ title: '', description: '', date: '' });
+    setForm({ nama: '', deskripsi: '', jadwal: '' });
     setFile(null);
     setShowForm(true);
   };
 
   return (
     <main className="max-w-5xl mx-auto pt-24 pb-10 px-4 min-h-screen bg-gradient-to-br from-blue-50 to-white">
-      <h1 className="text-2xl md:text-3xl font-extrabold mb-10 text-blue-800 text-center tracking-tight drop-shadow-lg">
-        <span className="bg-gradient-to-r from-blue-600 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
-          Admin - Kelola Pengumuman
-        </span>
+      <h1 className="text-3xl font-extrabold mb-8 text-blue-800 text-center tracking-tight drop-shadow-lg">
+        Admin - Kelola Ekstrakurikuler
       </h1>
       {err && (
         <div className="mb-4 px-4 py-2 bg-red-100 border-l-4 border-red-600 text-red-800 rounded animate-shake">
@@ -169,19 +159,8 @@ export default function AdminPengumumanPage() {
       {loading ? (
         <div className="flex justify-center items-center py-14">
           <svg className="animate-spin h-8 w-8 text-blue-400" viewBox="0 0 24 24" fill="none">
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8v8z"
-            />
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
           </svg>
           <span className="ml-3 text-lg text-gray-500">Loading...</span>
         </div>
@@ -193,37 +172,33 @@ export default function AdminPengumumanPage() {
               className="flex items-center gap-1 px-6 py-2 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-lg shadow-lg hover:scale-105 active:scale-95 transition duration-200"
             >
               <PlusIcon />
-              Tambah Pengumuman
+              Tambah Ekstrakurikuler
             </button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {items.map((item) => (
               <div
                 key={item._id}
-                className="bg-white border border-blue-200 rounded-2xl shadow-lg flex flex-col justify-between min-h-[190px] p-6 relative hover:shadow-2xl transition group"
+                className="bg-white border border-blue-200 rounded-2xl shadow-lg flex flex-col justify-between p-6 relative hover:shadow-2xl transition group"
               >
-                <div className="mb-6">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-2xl">📢</span>
-                    <h2 className="font-bold text-lg text-blue-900">{item.title}</h2>
+                {/* Gambar Ekskul */}
+                {item.imageUrl && (
+                  <div className="w-full flex justify-center mb-4">
+                    <img
+                      src={item.imageUrl.startsWith('/uploads/') ?
+                        `http://localhost:5000${item.imageUrl}` : item.imageUrl}
+                      alt={item.nama}
+                      className="rounded-xl max-h-40 object-contain border bg-slate-50"
+                      loading="lazy"
+                      style={{ maxWidth: 320, width: '100%' }}
+                    />
                   </div>
-                  <p className="text-gray-700 mb-3 whitespace-pre-line">{item.content || item.description}</p>
-                  {item.imageUrl && (
-                    <div className="w-full flex justify-center py-2">
-                      <img
-                        src={
-                          item.imageUrl.startsWith('/uploads/')
-                            ? `http://localhost:5000${item.imageUrl}` // patch untuk URL backend
-                            : item.imageUrl
-                        }
-                        alt="Gambar pengumuman"
-                        className="rounded-xl max-h-48 object-contain border"
-                        style={{background:'#f8fafc'}}
-                      />
-                    </div>
-                  )}
-                  {item.date && (
-                    <span className="inline-block bg-blue-50 text-blue-800 text-xs px-3 py-1 rounded-full font-semibold">{item.date}</span>
+                )}
+                <div className="mb-6">
+                  <h2 className="font-bold text-lg text-blue-900">{item.nama}</h2>
+                  <p className="text-gray-700 mb-2 whitespace-pre-line">{item.deskripsi}</p>
+                  {item.jadwal && (
+                    <span className="inline-block bg-blue-50 text-blue-800 text-xs px-3 py-1 rounded-full font-semibold">{item.jadwal}</span>
                   )}
                 </div>
                 <div className="flex gap-2 justify-end">
@@ -247,7 +222,7 @@ export default function AdminPengumumanPage() {
               </div>
             ))}
             {items.length === 0 && (
-              <div className="col-span-full text-gray-400 text-center py-12 text-xl">Belum ada pengumuman.</div>
+              <div className="col-span-full text-gray-400 text-center py-12 text-xl">Belum ada data ekstrakurikuler.</div>
             )}
           </div>
         </>
@@ -263,33 +238,45 @@ export default function AdminPengumumanPage() {
           >
             <h2 className="font-bold text-xl mb-2 text-slate-700 flex items-center gap-2">
               {editing ? <EditIcon /> : <PlusIcon />}
-              {editing ? 'Edit Pengumuman' : 'Tambah Pengumuman'}
+              {editing ? 'Edit Ekstrakurikuler' : 'Tambah Ekstrakurikuler'}
             </h2>
             <div className="space-y-3">
               <label className="block">
-                <span className="font-semibold text-blue-800">Judul</span>
+                <span className="font-semibold text-blue-800">Nama Ekstrakurikuler</span>
                 <input
                   type="text"
-                  name="title"
+                  name="nama"
                   required
                   className="w-full border-2 border-blue-200 rounded p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-black"
-                  value={form.title}
+                  value={form.nama}
                   onChange={handleChange}
                 />
               </label>
               <label className="block">
-                <span className="font-semibold text-blue-800">Isi/Deskripsi</span>
+                <span className="font-semibold text-blue-800">Deskripsi</span>
                 <textarea
-                  name="description"
+                  name="deskripsi"
                   required
                   className="w-full border-2 border-blue-200 rounded p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-black"
-                  value={form.description}
+                  value={form.deskripsi}
                   onChange={handleChange}
                   rows={4}
                 />
               </label>
               <label className="block">
-                <span className="font-semibold text-blue-800">Gambar</span>
+                <span className="font-semibold text-blue-800">Jadwal Kegiatan</span>
+                <input
+                  type="text"
+                  name="jadwal"
+                  required
+                  className="w-full border-2 border-blue-200 rounded p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-black"
+                  value={form.jadwal}
+                  onChange={handleChange}
+                  placeholder="Hari, jam, atau info lain"
+                />
+              </label>
+              <label className="block">
+                <span className="font-semibold text-blue-800">Gambar (JPG/PNG)</span>
                 <input
                   type="file"
                   name="image"
@@ -301,17 +288,6 @@ export default function AdminPengumumanPage() {
                 {file && (
                   <div className="mt-2 text-sm text-gray-500">{file.name}</div>
                 )}
-              </label>
-              <label className="block">
-                <span className="font-semibold text-blue-800">Tanggal (opsional)</span>
-                <input
-                  type="text"
-                  name="date"
-                  className="w-full border-2 border-blue-200 rounded p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-black"
-                  value={form.date}
-                  onChange={handleChange}
-                  placeholder="cth: 11 November 2023"
-                />
               </label>
             </div>
             <div className="flex gap-2 mt-2 justify-end">
@@ -338,11 +314,3 @@ export default function AdminPengumumanPage() {
     </main>
   );
 }
-
-// -- NOTES DEV --
-// - Endpoint diarahkan ke `/api/admin/pengumuman` (GET, POST, PUT, DELETE). 
-// - Authorization token HARUS diisi (sudah ada auth-middleware di backend!)
-// - Untuk demo, login/admin/token disimpan/manual, integrasi login user bisa menyusul.
-// - Gambar pengumuman bisa di-improve: sekarang pakai field imageUrl (string) jika diinginkan.
-// - Jika backend respon field "content" bukan "description", code handle kedua nama field.
-// - Komponen ini siap dikembangkan lebih lanjut, misal drag-n-drop urutan, upload file, dsb.

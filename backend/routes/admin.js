@@ -158,14 +158,16 @@ router.delete('/berita/:id', auth, async (req, res) => {
 
 
 // -- PENGUMUMAN --
-router.post('/pengumuman', auth, async (req, res) => {
+router.post('/pengumuman', auth, upload.single('image'), async (req, res) => {
   try {
-    const { title, content, imageUrl } = req.body;
+    const { title, content } = req.body;
 
     // Validasi input
-    if (!title || !content || !imageUrl) {
-      return res.status(400).json({ message: 'Title, content, dan imageUrl harus diisi' });
+    if (!title || !content || !req.file) {
+      return res.status(400).json({ message: 'Title, content, dan gambar harus diisi' });
     }
+
+    const imageUrl = '/uploads/' + req.file.filename;
 
     const pengumuman = new Pengumuman({
       title,
@@ -244,7 +246,8 @@ router.delete('/pengumuman/:id', auth, async (req, res) => {
   }
 });
 
-router.get('/pengumuman', auth, async (req, res) => {
+// SETELAH (public)
+router.get('/pengumuman', async (req, res) => {
   try {
     const pengumuman = await Pengumuman.find();
     res.json(pengumuman);
@@ -370,6 +373,54 @@ router.delete('/ekstrakulikuler/:id', auth, async (req, res) => {
   } catch (error) {
     res.status(500).json({ 
       message: 'Error deleting data',
+      error: error.message 
+    });
+  }
+});
+
+router.put('/ekstrakulikuler/:id', auth, upload.single('image'), async (req, res) => {
+  try {
+    const ekskul = await Ekstrakulikuler.findById(req.params.id);
+    if (!ekskul) {
+      return res.status(404).json({ message: 'Ekstrakurikuler tidak ditemukan' });
+    }
+
+    // Hapus gambar lama jika ada gambar baru
+    if (req.file && ekskul.imageUrl) {
+      const oldImage = path.join(__dirname, '../uploads', ekskul.imageUrl.split('/').pop());
+      fs.unlink(oldImage, (err) => {
+        if (err) console.error('Gagal hapus gambar lama:', err);
+      });
+    }
+
+    const updateData = {
+      nama: req.body.nama,
+      deskripsi: req.body.deskripsi,
+      imageUrl: req.file ? '/uploads/' + req.file.filename : ekskul.imageUrl
+    };
+
+    const updated = await Ekstrakulikuler.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      { new: true }
+    );
+    
+    res.json(updated);
+  } catch (error) {
+    res.status(500).json({ 
+      message: 'Error updating ekstrakurikuler',
+      error: error.message 
+    });
+  }
+}
+);
+router.get('/ekstrakulikuler', async (req, res) => {
+  try {
+    const ekstrakurikuler = await Ekstrakulikuler.find();
+    res.json(ekstrakurikuler);
+  } catch (error) {
+    res.status(500).json({ 
+      message: 'Error fetching ekstrakurikuler',
       error: error.message 
     });
   }

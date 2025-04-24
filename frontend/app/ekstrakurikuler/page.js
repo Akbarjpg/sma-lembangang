@@ -12,7 +12,7 @@ export default function Ekstrakurikuler() {
     async function fetchEkstrakurikuler() {
       setLoading(true);
       try {
-        const response = await fetch('/api/ekstrakurikuler');
+        const response = await fetch('http://localhost:5000/api/admin/ekstrakulikuler');
         if (!response.ok) {
           throw new Error('Gagal mengambil data ekstrakurikuler');
         }
@@ -33,13 +33,10 @@ export default function Ekstrakurikuler() {
   }, []);
 
   return (
-    <section className="py-10 md:py-20 bg-white relative overflow-hidden min-h-screen">
-      {/* Background Pattern only on md+ screens */}
-      <div className="hidden md:block absolute inset-0 z-0">
-        {/* Gradient Background */}
+    <section className="py-20 bg-white relative overflow-hidden min-h-screen">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-purple-50 opacity-50"></div>
-        
-        {/* Pola Dekoratif di Pojok Kiri dan Kanan */}
         <div className="absolute -left-20 -top-20 w-96 h-96 bg-blue-100 rounded-full opacity-30"></div>
         <div className="absolute -right-20 -bottom-20 w-96 h-96 bg-purple-100 rounded-full opacity-30"></div>
       </div>
@@ -47,43 +44,62 @@ export default function Ekstrakurikuler() {
       {/* Div pembungkus untuk konten */}
       <div className="max-w-5xl mx-auto px-4 relative z-10">
         {/* Judul */}
-        <div className="text-center mb-6 md:mb-12">
-          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">Ekstrakurikuler</h2>
+        <div className="text-center mb-12">
+          <h2 className="text-5xl font-bold text-gray-900 mb-4">Ekstrakurikuler</h2>
           {/* Garis Bawah */}
-          <hr className="border-t-2 border-gray-300 mx-auto w-20 md:w-24" />
+          <hr className="border-t-2 border-gray-300 mx-auto w-24" />
         </div>
 
         {/* Handle loading/error/empty states */}
         {loading ? (
-          <div className="text-center py-20">
+          <div className="text-center py-12">
             <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-500 border-r-transparent"></div>
             <p className="mt-4 text-gray-600">Memuat data ekstrakurikuler...</p>
           </div>
         ) : error ? (
-          <div className="text-center py-20">
-            <p className="text-red-500">Error: {error}</p>
-            <p className="mt-2 text-gray-600">Gagal memuat data ekstrakurikuler.</p>
+          <div className="text-center py-12">
+            <div className="bg-red-50 p-4 rounded-lg">
+              <p className="text-red-600">{error}</p>
+            </div>
           </div>
         ) : ekstrakurikuler.length === 0 ? (
-          <div className="text-center py-20">
+          <div className="text-center py-12">
             <p className="text-gray-500">Belum ada data ekstrakurikuler tersedia.</p>
           </div>
         ) : (
           /* Daftar Ekstrakurikuler */
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-            {ekstrakurikuler.map((ekskul) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
+            {ekstrakurikuler.map((ekskul, idx) => (
               <motion.div
-                key={ekskul.id}
+                key={ekskul._id || ekskul.id || idx}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: ekskul.id * 0.1 }}
-                className="bg-white shadow-xl rounded-xl p-4 md:p-6 text-left"
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                className="bg-white shadow-2xl rounded-2xl p-6 pb-5 text-left relative flex flex-col"
               >
-                <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-1 md:mb-2">{ekskul.nama}</h3>
-                <p className="text-gray-700 text-sm md:text-base mb-2 md:mb-4">{ekskul.deskripsi}</p>
-                <p className="text-sm text-gray-500">
-                  <span className="font-semibold">Jadwal:</span> {ekskul.jadwal}
-                </p>
+                {/* Gambar Ekskul di atas */}
+                {ekskul.imageUrl && (
+                  <div className="w-full flex justify-center mb-4">
+                    <img
+                      src={
+                        ekskul.imageUrl.startsWith('/uploads/')
+                          ? `http://localhost:5000${ekskul.imageUrl}`
+                          : ekskul.imageUrl
+                      }
+                      alt={ekskul.nama}
+                      className="rounded-xl max-h-48 object-contain border bg-slate-50"
+                      loading="lazy"
+                      style={{ maxWidth: 320, width: '100%' }}
+                    />
+                  </div>
+                )}
+                <h3 className="text-2xl font-semibold text-gray-900 mb-2">{ekskul.nama}</h3>
+                <p className="text-gray-700 mb-4">{ekskul.deskripsi}</p>
+                {ekskul.jadwal && (
+                  <div className="inline-block bg-blue-50 text-blue-800 text-sm px-3 py-1 rounded-full font-semibold">
+                    {ekskul.jadwal}
+                  </div>
+                )}
               </motion.div>
             ))}
           </div>
