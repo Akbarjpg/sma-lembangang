@@ -5,6 +5,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 // Login Endpoint
+router.post('/test-hello', (req,res)=>res.json({ok:true, pesan:'Router aktif'}));
+
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   console.log('Login endpoint dipanggil');
