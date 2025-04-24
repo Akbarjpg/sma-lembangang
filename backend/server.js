@@ -4,6 +4,7 @@ const app = express();
 const mongoose = require('mongoose');
 const connectDB = require('./db'); // Pastikan ini adalah jalur yang benar ke file db.js
 const cors = require('cors'); // Pastikan cors diimpor
+const kontakRouter = require('./routes/kontak'); // Import kontak router
 app.use('/public', express.static('public'));
 
 // Koneksi ke MongoDB
@@ -31,6 +32,9 @@ app.use('/api/admin', adminRoutes); // Tidak perlu middleware auth di sini jika 
 
 const authRoutes = require('./routes/auth'); // Import rute auth
 app.use('/api/auth', authRoutes); // Daftarkan rute auth
+
+// Kontak Routes
+app.use('/api/kontak', kontakRouter); // Daftarkan rute kontak
 
 // Dashboard Route
 app.get('/api/dashboard', (req, res) => {

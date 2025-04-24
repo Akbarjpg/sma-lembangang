@@ -55,7 +55,7 @@ export default function Profile() {
           >
             <h3 className="text-2xl font-semibold text-blue-700 mb-3">Visi</h3>
             <p className="text-gray-700 text-base md:text-lg">
-              Menjadi sekolah terdepan dalam mencetak generasi unggul yang beriman, berilmu, dan berakhlak mulia, serta peduli lingkungan dan bangsa.
+              Mewujudkan generasi islami yang unggul, inovaatif, dan berdaya saing global sebagai implementasi merdeka berlajar.
             </p>
           </motion.div>
           <motion.div 
@@ -65,9 +65,11 @@ export default function Profile() {
           >
             <h3 className="text-2xl font-semibold text-green-700 mb-3">Misi</h3>
             <ul className="list-disc list-inside text-gray-700 text-base md:text-lg space-y-1">
-              <li>Menyelenggarakan pendidikan yang berkualitas dan mengintegrasikan nilai-nilai Islam di semua kegiatan sekolah.</li>
-              <li>Mengembangkan potensi siswa baik akademik maupun non-akademik dalam suasana kekeluargaan.</li>
-              <li>Memberikan teladan akhlak, disiplin, serta motivasi berprestasi.</li>
+              <li>Menanamkan nilai-nilai keimanan dan ketaqwaan kepada Allah SWT.</li>
+              <li>Membentuk generasi yang kreatif, berdedikasi penuh karya dan memiliki keterampilan.</li>
+              <li>Meningkatkan kreativitas dan inovasi.</li>
+              <li>Menerapkan disiplin dan menghargai waktu.</li>
+              <li>Menciptakan lingkungan sekolah yang sehat sebagai pembentukan akhlak dan tempat berkreasi.</li>
             </ul>
           </motion.div>
         </div>

@@ -152,9 +152,11 @@ export default function Features() {
                 <h3 className="text-xl font-semibold text-gray-900">Penerimaan Siswa Baru 2024</h3>
               </div>
               <p className="text-gray-700 mt-4">Pendaftaran siswa baru untuk tahun ajaran 2024 telah dibuka. Segera daftarkan diri Anda!</p>
-              <button className="mt-4 px-6 py-2 bg-green-700 text-white text-sm font-semibold rounded-2xl hover:bg-green-800 transition-colors">
-                Baca Selengkapnya
-              </button>
+              <Link href="/penerimaan" passHref legacyBehavior>
+                <button className="mt-4 px-6 py-2 bg-green-700 text-white text-sm font-semibold rounded-2xl hover:bg-green-800 transition-colors">
+                  Baca Selengkapnya
+                </button>
+              </Link>
             </motion.div>
 
             {/* Berita 2 */}
@@ -166,9 +168,11 @@ export default function Features() {
                 <h3 className="text-xl font-semibold text-gray-900">Jadwal Ujian Semester</h3>
               </div>
               <p className="text-gray-700 mt-4">Jadwal ujian semester ganjil telah dirilis. Silakan cek jadwal Anda!</p>
-              <button className="mt-4 px-6 py-2 bg-green-700 text-white text-sm font-semibold rounded-2xl hover:bg-green-800 transition-colors">
-                Baca Selengkapnya
-              </button>
+              <Link href="/jadwal-ujian" passHref legacyBehavior>
+                <button className="mt-4 px-6 py-2 bg-green-700 text-white text-sm font-semibold rounded-2xl hover:bg-green-800 transition-colors">
+                  Baca Selengkapnya
+                </button>
+              </Link>
             </motion.div>
 
             {/* Berita 3 */}
@@ -180,9 +184,11 @@ export default function Features() {
                 <h3 className="text-xl font-semibold text-gray-900">Kegiatan Ekstrakurikuler</h3>
               </div>
               <p className="text-gray-700 mt-4">Daftar kegiatan ekstrakurikuler telah diperbarui. Ayo bergabung dan kembangkan bakat Anda!</p>
-              <button className="mt-4 px-6 py-2 bg-green-700 text-white text-sm font-semibold rounded-2xl hover:bg-green-800 transition-colors">
-                Baca Selengkapnya
-              </button>
+              <Link href="/ekstrakurikuler" passHref legacyBehavior>
+                <button className="mt-4 px-6 py-2 bg-green-700 text-white text-sm font-semibold rounded-2xl hover:bg-green-800 transition-colors">
+                  Baca Selengkapnya
+                </button>
+              </Link>
             </motion.div>
           </div>
 

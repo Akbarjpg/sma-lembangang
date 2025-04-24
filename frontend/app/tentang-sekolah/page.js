@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
-export default function TentangSekolah() {
+export default function visiSekolah() {
   return (
     <section className="py-16 md:py-24 bg-gradient-to-b from-purple-50 to-white min-h-screen flex items-center">
       <div className="max-w-4xl mx-auto w-full px-4">

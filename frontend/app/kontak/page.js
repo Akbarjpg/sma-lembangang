@@ -1,8 +1,41 @@
 'use client';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { HiOutlineMail, HiOutlinePhone, HiOutlineLocationMarker } from 'react-icons/hi'; // Import ikon outline
 
 export default function Kontak() {
+  const [form, setForm] = useState({ nama: '', email: '', pesan: '' });
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState(null);
+
+  const handleChange = e => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setResult(null);
+
+    try {
+      const res = await fetch("/api/kontak", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setResult({ type: 'success', msg: data.message || "Pesan berhasil dikirim!" });
+        setForm({ nama: '', email: '', pesan: '' });
+      } else {
+        setResult({ type: 'error', msg: data.message || "Terjadi kesalahan, coba lagi." });
+      }
+    } catch (err) {
+      setResult({ type: 'error', msg: "Gagal menghubungi server." });
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <section className="py-20 bg-white relative overflow-hidden min-h-screen">
       {/* Background Pattern */}
@@ -53,7 +86,7 @@ export default function Kontak() {
                 </div>
                 <div>
                   <p className="text-gray-700">Telepon</p>
-                  <p className="text-gray-900 font-semibold">+62 123 4567 890</p>
+                  <p className="text-gray-900 font-semibold">+62 821 8819 0445</p>
                 </div>
               </div>
 
@@ -65,7 +98,7 @@ export default function Kontak() {
                 <div>
                   <p className="text-gray-700">Alamat</p>
                   <p className="text-gray-900 font-semibold">
-                    Jl. Pendidikan No. 123, Lempangang, Makassar, Sulawesi Selatan
+                    Jl. Poros Limbung DS.Mattironaji Desa Panciro
                   </p>
                 </div>
               </div>
@@ -80,7 +113,7 @@ export default function Kontak() {
             className="bg-white shadow-2xl rounded-2xl p-6"
           >
             <h3 className="text-2xl font-semibold text-gray-900 mb-6">Kirim Pesan</h3>
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSubmit}>
               {/* Nama */}
               <div>
                 <label htmlFor="nama" className="block text-gray-700 mb-1">Nama</label>
@@ -88,9 +121,12 @@ export default function Kontak() {
                   type="text"
                   id="nama"
                   name="nama"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="text-black w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Masukkan nama Anda"
                   required
+                  value={form.nama}
+                  onChange={handleChange}
+                  disabled={loading}
                 />
               </div>
 
@@ -101,9 +137,12 @@ export default function Kontak() {
                   type="email"
                   id="email"
                   name="email"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="text-black w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Masukkan email Anda"
                   required
+                  value={form.email}
+                  onChange={handleChange}
+                  disabled={loading}
                 />
               </div>
 
@@ -114,9 +153,12 @@ export default function Kontak() {
                   id="pesan"
                   name="pesan"
                   rows="4"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="text-black w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Masukkan pesan Anda"
                   required
+                  value={form.pesan}
+                  onChange={handleChange}
+                  disabled={loading}
                 ></textarea>
               </div>
 
@@ -124,10 +166,16 @@ export default function Kontak() {
               <button
                 type="submit"
                 className="w-full px-6 py-3 bg-green-700 text-white font-semibold rounded-lg hover:bg-green-800 transition-colors"
+                disabled={loading}
               >
-                Kirim Pesan
+                {loading ? 'Mengirim...' : 'Kirim Pesan'}
               </button>
             </form>
+            {result && (
+              <div className={`mt-4 px-4 py-2 rounded ${result.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                {result.msg}
+              </div>
+            )}
           </motion.div>
         </div>
 
