@@ -42,7 +42,11 @@ export default function AdminDashboard() {
             description="Tambah, edit, dan hapus data ekstrakurikuler."
             href="/admin/ekstrakurikuler"
           />
-          {/* Tambahkan menu lain di sini jika perlu */}
+          <AdminMenuItem
+            title="Kelola Jadwal Ujian"
+            description="Atur jadwal ujian untuk siswa."
+            href="/admin/jadwal-ujian"
+          />
         </div>
       </div>
     </main>

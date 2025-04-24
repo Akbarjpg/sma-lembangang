@@ -286,18 +286,6 @@ router.post('/jadwal', async (req, res) => {
   }
 });
 
-router.get('/jadwal', async (req, res) => {
-  try {
-    const jadwal = await JadwalUjian.find();
-    res.json(jadwal);
-  } catch (error) {
-    res.status(500).json({ 
-      message: 'Error fetching jadwal ujian',
-      error: error.message 
-    });
-  }
-});
-
 router.put('/jadwal/:id', async (req, res) => {
   try {
     const { tanggal, mataPelajaran, kelas, jamMulai, jamSelesai } = req.body;
@@ -317,6 +305,32 @@ router.put('/jadwal/:id', async (req, res) => {
     res.status(500).json({ 
       message: 'Error updating jadwal ujian',
       error: error.message 
+    });
+  }
+});
+router.delete('/jadwal/:id', async (req, res) => {
+  try {
+    const jadwal = await JadwalUjian.findByIdAndDelete(req.params.id);
+    if (!jadwal) {
+      return res.status(404).json({ message: 'Jadwal ujian tidak ditemukan' });
+    }
+    res.json({ message: 'Data berhasil dihapus' });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error deleting jadwal ujian',
+      error: error.message
+    });
+  }
+});
+
+router.get('/jadwal', async (req, res) => {
+  try {
+    const jadwal = await JadwalUjian.find();
+    res.json(jadwal);
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error fetching jadwal ujian',
+      error: error.message
     });
   }
 });
