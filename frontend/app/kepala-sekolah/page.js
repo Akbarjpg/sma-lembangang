@@ -21,7 +21,7 @@ export default function KepalaSekolahPage() {
       >
         <div className="flex flex-col items-center text-center mb-6">
           <Image 
-            src="/foto_kepsek.jpg" // ganti ke foto kepala sekolah yang ada di /public
+            src="/kepsek.jpeg" // ganti ke foto kepala sekolah yang ada di /public
             alt="Foto Kepala Sekolah"
             width={120}
             height={120}

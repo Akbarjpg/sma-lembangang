@@ -149,9 +149,9 @@ export default function Features() {
                 <div className="bg-blue-500 p-4 rounded-2xl shadow-md">
                   <HiOutlineNewspaper className="text-white text-3xl" /> {/* Ikon outline */}
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900">Penerimaan Siswa Baru 2024</h3>
+                <h3 className="text-xl font-semibold text-gray-900">Penerimaan Siswa Baru 2025</h3>
               </div>
-              <p className="text-gray-700 mt-4">Pendaftaran siswa baru untuk tahun ajaran 2024 telah dibuka. Segera daftarkan diri Anda!</p>
+              <p className="text-gray-700 mt-4">Pendaftaran siswa baru untuk tahun ajaran 2025 telah dibuka. Segera daftarkan diri Anda!</p>
               <Link href="/penerimaan" passHref legacyBehavior>
                 <button className="mt-4 px-6 py-2 bg-green-700 text-white text-sm font-semibold rounded-2xl hover:bg-green-800 transition-colors">
                   Baca Selengkapnya
