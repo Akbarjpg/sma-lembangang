@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 'use client';
 import { motion } from 'framer-motion';
 import { HiOutlinePhone } from 'react-icons/hi';
@@ -22,10 +23,9 @@ export default function InformasiLengkap() {
             termasuk info proses belajar, keunggulan, jadwal penting, dan kontak yang bisa dihubungi untuk pertanyaan lebih lanjut.
           </p>
           <ul className="list-disc list-inside text-gray-700 mb-6">
-            <li>Waktu pelajaran berlangsung: Senin - Sabtu, mulai 07.30 s/d 13.30</li>
+            <li>Waktu pelajaran berlangsung: Senin - Jum'at, mulai 07.30 s/d 15.30</li>
             <li>Kurikulum nasional dan materi Muhammadiyah</li>
-            <li>Pembelajaran berbasis kelompok</li>
-            <li>Pengenalan teknologi komputer untuk seluruh siswa</li>
+            <li>Pembelajaran teknologi komputer untuk seluruh siswa</li>
             <li>Bimbingan belajar dan konseling untuk siswa</li>
             <li>Berbagai kegiatan ekstrakurikuler</li>
           </ul>
@@ -35,13 +35,13 @@ export default function InformasiLengkap() {
           </p>
           <div className="bg-blue-100 rounded-lg p-4 mb-2 flex items-center gap-2">
             <HiOutlinePhone className="text-blue-900 text-xl" />
-            <span className="font-semibold text-blue-900">Ibu Siti (Guru BK):</span>
-            <span className="tracking-wide font-bold text-base sm:text-lg text-blue-900 ml-1">0812-3456-7890</span>
+            <span className="font-semibold text-blue-900">Ibu Ully (Guru BK):</span>
+            <span className="tracking-wide font-bold text-base sm:text-lg text-blue-900 ml-1">+62 823-4710-9562</span>
           </div>
           <div className="bg-blue-100 rounded-lg p-4 flex items-center gap-2">
             <HiOutlinePhone className="text-blue-900 text-xl" />
-            <span className="font-semibold text-blue-900">Kantor Tata Usaha:</span>
-            <span className="tracking-wide font-bold text-base sm:text-lg text-blue-900 ml-1">0411-123456</span>
+            <span className="font-semibold text-blue-900">Ibu Lilis (Tata Usaha):</span>
+            <span className="tracking-wide font-bold text-base sm:text-lg text-blue-900 ml-1">+62 823-4651-1133</span>
           </div>
         </div>
       </div>

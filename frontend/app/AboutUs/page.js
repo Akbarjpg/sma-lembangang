@@ -81,7 +81,7 @@ export default function Profile() {
             <p className="text-gray-800 italic mb-1">
               "SMA Muhammadiyah Lempangang tidak hanya mendidik secara akademik, tapi juga memberi perhatian besar pada pembiasaan ibadah, kejujuran, dan kebersamaan. Siswa-siswi kami diarahkan menjadi insan yang berilmu, santun, dan siap menghadapi era digital dengan nilai Islami."
             </p>
-            <span className="text-sm font-semibold text-blue-700 block mt-3">- Drs. Ahmad, S.Pd (Kepala Sekolah)</span>
+            <span className="text-sm font-semibold text-blue-700 block mt-3">- Sunarti R., S.Pd., Gr. (Kepala Sekolah)</span>
           </div>
         </div>
 

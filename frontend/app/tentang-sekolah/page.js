@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 'use client';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
@@ -38,12 +39,9 @@ export default function visiSekolah() {
         <div className="bg-white/80 rounded-2xl shadow p-6 mt-4 text-center">
           <h2 className="text-lg md:text-xl font-bold text-purple-800 mb-2">Keunggulan Kami</h2>
           <ul className="list-disc list-inside text-gray-900 text-left max-w-xl mx-auto mx">
-            <li>Pembinaan keagamaan dan ibadah rutin</li>
-            <li>Lingkungan sekolah yang aman, tenang, dan kekeluargaan</li>
-            <li>Pembelajaran mudah dipahami, didampingi guru berpengalaman</li>
-            <li>Kegiatan ekstrakurikuler beragam (olahraga, pramuka, dll.)</li>
-            <li>Fokus pada pembentukan karakter, disiplin, dan kepedulian sosial</li>
-            <li>Terbuka untuk siapa pun dari berbagai latar belakang</li>
+            <li>BTQ (Baca Tulis AL-Qur'an)</li>
+            <li>Shalat Dhuha</li>
+            <li>Garasi (Gerakan Literasi Numerasi)</li>
           </ul>
         </div>
       </div>

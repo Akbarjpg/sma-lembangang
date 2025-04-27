@@ -28,7 +28,7 @@ export default function KepalaSekolahPage() {
             className="rounded-full shadow-xl mb-4 bg-blue-100 object-cover"
             priority
           />
-          <h2 className="text-2xl md:text-4xl font-extrabold text-blue-900 mb-2">Drs. Ibu Kepala sekolah, S.Pd</h2>
+          <h2 className="text-2xl md:text-4xl font-extrabold text-blue-900 mb-2">Sunarti R., S.Pd., Gr.</h2>
           <span className="block text-base md:text-lg text-gray-700 mb-1">Kepala Sekolah</span>
         </div>
 
@@ -39,7 +39,7 @@ export default function KepalaSekolahPage() {
             Dengan izin Allah, kami bertekad membimbing siswa-siswi menjadi generasi Islami yang unggul, cerdas, dan berakhlak mulia.  
             Di SMA Muhammadiyah Lempangang, kami yakin setiap anak punya potensi. Mari bersama membangun masa depan yang lebih baik dengan semangat disiplin, kejujuran, dan kebersamaan."
           </p>
-          <span className="block mt-3 text-sm text-gray-600 font-semibold">- Drs. Ibu kepala sekolah, S.Pd</span>
+          <span className="block mt-3 text-sm text-gray-600 font-semibold">- Sunarti R., S.Pd., Gr.</span>
         </div>
 
         <div className="bg-blue-50 rounded-xl p-5 mb-5 shadow text-left">
