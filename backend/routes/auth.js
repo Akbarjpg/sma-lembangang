@@ -9,7 +9,11 @@ router.post('/test-hello', (req,res)=>res.json({ok:true, pesan:'Router aktif'}))
 
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  console.log('Login endpoint dipanggil');
+  
+  // Validasi input
+  if (!username || !password) {
+    return res.status(400).json({ message: 'Username dan password diperlukan!' });
+  }
 
   try {
     // Cari user berdasarkan username
@@ -25,13 +29,26 @@ router.post('/login', async (req, res) => {
     }
 
     // Buat token JWT
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.status(200).json({ token });
+    const token = jwt.sign(
+      { id: user._id, username: user.username }, 
+      process.env.JWT_SECRET, 
+      { expiresIn: '1h' }
+    );
+    
+    // Kirim respons sukses dengan token dan info user
+    res.status(200).json({ 
+      message: 'Login berhasil!',
+      token,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email
+      }
+    });
   } catch (error) {
+    console.error('Login error:', error);
     res.status(500).json({ message: 'Terjadi kesalahan server', error: error.message });
   }
-  console.log('Login endpoint dipanggil');
 });
-console.log('Login endpoint dipanggil');
 
 module.exports = router;
