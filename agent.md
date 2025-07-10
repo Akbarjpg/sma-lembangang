@@ -196,8 +196,36 @@ const login = async (credentials) => {
 4. **Error Handling**: Enhanced error handling with better messages
 5. **Next.js Config**: Fixed API rewrites and added CORS headers
 
+## CRITICAL ERROR RESOLVED ✅
+
+### Error: bcrypt Native Binding Issue on Vercel
+```
+Error: /var/task/backend/node_modules/bcrypt/lib/binding/napi-v3/bcrypt_lib.node: invalid ELF header
+500: INTERNAL_SERVER_ERROR
+Code: FUNCTION_INVOCATION_FAILED
+```
+
+**Root Cause**: bcrypt uses native bindings that are incompatible with Vercel's serverless environment.
+
+**Solution**: ✅ **FIXED** - Replaced bcrypt with bcryptjs (pure JavaScript implementation)
+
+### Critical Fixes Applied:
+1. ✅ **Updated auth.js**: Changed `require('bcrypt')` to `require('bcryptjs')`
+2. ✅ **Updated user.js**: Changed bcrypt import to bcryptjs
+3. ✅ **Updated seedAdmin.js**: Changed bcrypt import to bcryptjs
+4. ✅ **Updated package.json**: Removed bcrypt dependency, kept bcryptjs
+5. ✅ **Added start script**: Added `"start": "node server.js"` to package.json
+
+### Installation Commands (Already Executed):
+```bash
+npm uninstall bcrypt
+npm install
+```
+
 ### Next Steps:
-1. Deploy backend to Vercel with environment variables set
+1. **Deploy backend to Vercel** - bcrypt error should be resolved
 2. Deploy frontend to Vercel with NEXT_PUBLIC_API_URL set
 3. Update FRONTEND_URL in backend env to match frontend domain
 4. Test login functionality after deployment
+
+**Note**: bcryptjs maintains the same API as bcrypt, so no code changes were needed beyond the import statements.
