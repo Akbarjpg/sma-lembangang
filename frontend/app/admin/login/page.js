@@ -1,13 +1,33 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { testAPI, testHealthCheck } from '../../utils/api';
 
 export default function AdminLoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [debug, setDebug] = useState('');
   const router = useRouter();
+
+  // Test API connection on component mount
+  useEffect(() => {
+    const testConnection = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        setDebug(`API URL: ${apiUrl || 'Not set'}`);
+        
+        // Test health check
+        await testHealthCheck();
+        setDebug(prev => prev + ' | Health check: OK');
+      } catch (err) {
+        setDebug(prev => prev + ` | Health check failed: ${err.message}`);
+      }
+    };
+
+    testConnection();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,24 +35,46 @@ export default function AdminLoginPage() {
     setError('');
 
     try {
-      const res = await fetch('/api/auth/login', {
+      // Use environment variable for API URL
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+      const endpoint = apiUrl ? `${apiUrl}/api/auth/login` : '/api/auth/login';
+      
+      console.log('Attempting login to:', endpoint);
+      
+      const res = await fetch(endpoint, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        credentials: 'include',
         body: JSON.stringify({ username, password }),
       });
 
+      console.log('Response status:', res.status);
+      console.log('Response headers:', res.headers);
+
       if (!res.ok) {
-        const msg = await res.text();
-        throw new Error(msg || 'Login gagal');
+        let errorMessage = 'Login gagal';
+        try {
+          const errorData = await res.json();
+          errorMessage = errorData.message || errorMessage;
+        } catch (e) {
+          errorMessage = await res.text() || errorMessage;
+        }
+        throw new Error(errorMessage);
       }
 
       const data = await res.json();
+      console.log('Login response:', data);
+      
       if (!data.token) throw new Error('Token tidak ditemukan di response!');
 
       localStorage.setItem('admin_token', data.token);
       router.push('/admin');
     } catch (err) {
-      setError(err.message || 'Gagal login');
+      console.error('Login error:', err);
+      setError(err.message || 'Gagal login. Periksa koneksi internet Anda.');
       setLoading(false);
     }
   };
@@ -46,6 +88,11 @@ export default function AdminLoginPage() {
         <h1 className="text-2xl font-bold text-center text-blue-800 mb-4">Login Admin/Guru</h1>
         {error && (
           <div className="bg-red-50 p-2 rounded text-red-600 text-sm text-center">{error}</div>
+        )}
+        {debug && (
+          <div className="bg-blue-50 p-2 rounded text-blue-600 text-xs text-center">
+            Debug: {debug}
+          </div>
         )}
         <div>
           <label className="block mb-1 text-gray-700">Username</label>

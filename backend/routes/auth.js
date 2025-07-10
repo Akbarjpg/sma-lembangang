@@ -15,22 +15,27 @@ router.post('/test-hello', (req, res) => res.json({ok: true, pesan: 'Router akti
  */
 router.post('/login', async (req, res) => {
   try {
+    console.log('Login attempt:', { username: req.body.username, timestamp: new Date().toISOString() });
+    
     const { username, password } = req.body;
     
     // Validasi input
     if (!username || !password) {
+      console.log('Login failed: Missing credentials');
       return res.status(400).json({ message: 'Username dan password wajib diisi.' });
     }
 
     // Cari user berdasarkan username
     const user = await User.findOne({ username });
     if (!user) {
+      console.log('Login failed: User not found -', username);
       return res.status(401).json({ message: 'Username atau password salah.' });
     }
 
     // Validasi password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
+      console.log('Login failed: Invalid password for user -', username);
       return res.status(401).json({ message: 'Username atau password salah.' });
     }
 
@@ -38,6 +43,8 @@ router.post('/login', async (req, res) => {
     const payload = { userId: user._id, username: user.username };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
 
+    console.log('Login successful for user:', username);
+    
     // Kirim respons sukses
     res.json({
       message: 'Login berhasil',
@@ -50,7 +57,7 @@ router.post('/login', async (req, res) => {
     });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ message: 'Terjadi kesalahan server' });
+    res.status(500).json({ message: 'Terjadi kesalahan server', error: error.message });
   }
 });
 
