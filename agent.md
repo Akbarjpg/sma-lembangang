@@ -255,26 +255,41 @@ Error: /var/task/backend/node_modules/bcrypt/lib/binding/napi-v3/bcrypt_lib.node
 6. ✅ **Replaced bcrypt**: All files now use bcryptjs
 7. ✅ **Enhanced Error Handling**: Better logging and error messages
 
+## NEW ISSUES FOUND & FIXED ✅
+
+### Issue 1: "Terjadi kesalahan server" on Login
+**Root Cause**: Server returning generic error message instead of specific error details
+
+### Issue 2: "Endpoint tidak ditemukan" for GET "/"
+**Root Cause**: Missing root endpoint handler
+
+### Quick Fixes Applied:
+1. ✅ **Added Root Endpoint**: Added GET "/" handler
+2. ✅ **Enhanced Error Logging**: Better error details for login
+3. ✅ **Updated FRONTEND_URL**: Need to set actual frontend URL
+
 ### Environment Variables Check:
 ```
 ✅ MONGO_URI: Set (length: 109)
 ✅ JWT_SECRET: Set (length: 512)  
-✅ FRONTEND_URL: Set
+❌ FRONTEND_URL: Still set to placeholder
 ✅ NODE_ENV: Set to production
 ✅ PORT: Set to 5000
 ```
 
 ### Next Steps:
-1. **Deploy backend to Vercel** - All critical errors should be resolved
-2. **Set Environment Variables in Vercel Dashboard**:
+1. **IMPORTANT**: Update FRONTEND_URL in .env to your actual frontend domain
+2. **Deploy backend to Vercel** - All critical errors should be resolved
+3. **Set Environment Variables in Vercel Dashboard**:
    - `MONGO_URI`: Your MongoDB connection string
    - `JWT_SECRET`: Your JWT secret
-   - `FRONTEND_URL`: Your frontend Vercel URL
+   - `FRONTEND_URL`: Your actual frontend Vercel URL
    - `NODE_ENV`: `production`
-3. Deploy frontend to Vercel with NEXT_PUBLIC_API_URL set
-4. Test login functionality after deployment
+4. Deploy frontend to Vercel with NEXT_PUBLIC_API_URL set
+5. Test login functionality after deployment
 
 ### Test Endpoints Available:
+- `/` - Root endpoint (now working)
 - `/health` - Server health check
 - `/api/test` - API functionality test
 - `/api/ping` - Simple ping test

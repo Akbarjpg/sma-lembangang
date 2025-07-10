@@ -52,6 +52,24 @@ if (process.env.MONGO_URI) {
   console.error('❌ MONGO_URI environment variable not set');
 }
 
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'SMA Web Backend API',
+    status: 'running',
+    version: '1.0.0',
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      health: '/health',
+      test: '/api/test',
+      ping: '/api/ping',
+      auth: '/api/auth/*',
+      admin: '/api/admin/*',
+      kontak: '/api/kontak/*'
+    }
+  });
+});
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.json({ 

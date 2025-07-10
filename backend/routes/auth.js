@@ -8,6 +8,25 @@ require('dotenv').config();
 // Test endpoint
 router.post('/test-hello', (req, res) => res.json({ok: true, pesan: 'Router aktif'}));
 
+// Test endpoint to check if users exist
+router.get('/test-users', async (req, res) => {
+  try {
+    const userCount = await User.countDocuments();
+    const users = await User.find({}, 'username role').limit(5);
+    res.json({
+      message: 'Users test',
+      totalUsers: userCount,
+      sampleUsers: users,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error fetching users',
+      error: error.message
+    });
+  }
+});
+
 /**
  * @route   POST /api/auth/login
  * @desc    Authenticate user & get token
@@ -40,6 +59,11 @@ router.post('/login', async (req, res) => {
     }
 
     // Generate JWT
+    if (!process.env.JWT_SECRET) {
+      console.error('JWT_SECRET environment variable not set');
+      return res.status(500).json({ message: 'Server configuration error: JWT_SECRET not set' });
+    }
+
     const payload = { userId: user._id, username: user.username };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
 
@@ -56,8 +80,32 @@ router.post('/login', async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ message: 'Terjadi kesalahan server', error: error.message });
+    console.error('Login error details:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    });
+    
+    // More specific error messages
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({ 
+        message: 'Data validation error', 
+        details: error.message 
+      });
+    }
+    
+    if (error.name === 'MongooseError' || error.name === 'MongoError') {
+      return res.status(500).json({ 
+        message: 'Database connection error', 
+        details: 'Please check database connection' 
+      });
+    }
+    
+    res.status(500).json({ 
+      message: 'Terjadi kesalahan server', 
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error',
+      timestamp: new Date().toISOString()
+    });
   }
 });
 
